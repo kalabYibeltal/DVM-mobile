@@ -1,16 +1,12 @@
 # dvm
 
-A new Flutter project.
+5th year project done by me(Kalab Yibeltal) and my friend Michael Eshete
 
-## Getting Started
+## Porject details
 
-This project is a starting point for a Flutter application.
+This project has 4 components
+- Mobile app for customers
+- Backend
+- web app for admins
+- And the vending machine in 3D itself 
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
