@@ -367,7 +367,7 @@ class _BuyitemPageState extends State<BuyitemPage> {
 
 
     // decrease amount from user balance
-    var url = Uri.parse('https://dvm.onrender.com/updatebalance');
+    var url = Uri.parse('https://dvm-dq1y.onrender.com/updatebalance');
     var body = {'userid': user.id, 'newbalance': user.balance};
 
     var req = http.Request('POST', url);
@@ -390,7 +390,7 @@ class _BuyitemPageState extends State<BuyitemPage> {
     };
 
     // deduct item from vending machine and increase income
-    var url = Uri.parse('https://dvm.onrender.com/vmachine/buyitem_post');
+    var url = Uri.parse('https://dvm-dq1y.onrender.com/vmachine/buyitem_post');
     var body = {'machineid': machine.id, 'itemname': item};
 
     var req = http.Request('POST', url);
