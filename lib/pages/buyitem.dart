@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:dvm/pages/login.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:dio/dio.dart';
+import 'package:dvm/pages/history.dart';
 // void main() => runApp(DriverPage());
 
 class BuyitemPage extends StatefulWidget {
@@ -66,94 +67,140 @@ class _BuyitemPageState extends State<BuyitemPage> {
         SizedBox(
           height: 25, //height to 9% of screen height,
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(200, 0, 0, 0),
-          child: Text("balance:  ${User.balance}",
-            style: TextStyle(fontSize: 25.0, color: Colors.green),
-          ),
+        Row(
+          children: [
+            SizedBox(
+              width: 16, //height to 9% of screen height,
+            ),
+            Container(
+              width: 120,
+              height: 35,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                ),
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyListViewPage()),
+                    // (Route<dynamic> route) => false,
+                  );
+                },
+                child: Center(
+                  child: Column (
+                    children: [
+                      Text('History',
+                        style: TextStyle(fontSize: 25.0, color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(90, 0, 0, 0),
+              child: Text("Balance:  ${User.balance}",
+                style: TextStyle(fontSize: 25.0, color: Colors.green),
+              ),
+            ),
+          ],
         ),
+
         SizedBox(
-          height: 120, //height to 9% of screen height,
+          height: 50, //height to 9% of screen height,
         ),
         Row(
           children: [
             SizedBox(
-              width: 4, //height to 9% of screen height,
+              width: 16, //height to 9% of screen height,
             ),
-            Container (
-              width: 200,
-              height: 100,
-              child: ElevatedButton(
-                child: Center(
-                  child: Column (
-                    children: [
-                      SizedBox(
-                        height: 20, //height to 9% of screen height,
+
+             Container (
+                  width: 180,
+                  height: 250,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
                       ),
-                      Text('Coca',
-                        style: TextStyle(fontSize: 25.0),
+                      child: Center(
+                        child: Column (
+                          children: [
+                            SizedBox(
+                              height: 20, //height to 9% of screen height,
+                            ),
+                            Image.asset('assets/chips.png'),
+                            Text('Sun Chips',
+                              style: TextStyle(fontSize: 25.0, color: Colors.black),
+                            ),
+                            Center(child: Text('15 Br',
+                              style: TextStyle(fontSize: 20.0, color: Colors.black),
+                            )),
+                          ],
+                        ),
                       ),
-                      Center(child: Text('5 Br',
-                        style: TextStyle(fontSize: 20.0),
-                      )),
-                    ],
-                  ),
-                ),
 
-                  onPressed: () async {
-                    String item = 'coca';
-                    int price = widget.machine.items![item]["price"];
-                    int count = widget.machine.items![item]["stock"];
-                    if (User.balance! >= price){
-                      if (count > 0){
-                        User.balance = User.balance! - price;
-                        Machine.items![item]["stock"] = Machine.items![item]["stock"] - 1;
+                      onPressed: () async {
+                        String item = 'chips';
+                        int price = widget.machine.items![item]["price"];
+                        int count = widget.machine.items![item]["stock"];
+                        if (User.balance! >= price){
+                          if (count > 0){
+                            User.balance = User.balance! - price;
+                            Machine.items![item]["stock"] = Machine.items![item]["stock"] - 1;
 
-                        var result = await purchaseItem('moya',User, Machine, price);
+                            var result = await purchaseItem('chips',User, Machine, price);
+                            var result2 = await destockmachine("chips",Machine,price);
+                            var result3 = await giveItem(1);
+                            setState(() {
+                              purchase = result;
+                              operation = 3;
+                              operation2 = 1;
+                            });
+                          }
+                          else {
+                            setState(() {
+                              purchase = "Insufficient stock in the machine";
+                              operation = 2;
+                            });
+                          };
 
-                        setState(() {
-                          purchase = result;
-                            operation = 3;
-                            operation2 = 1;
-                        });
+                        }
+                        else {
+                          setState(() {
+                            purchase = "Insufficient balance";
+                            operation = 2;
+                            operation2 = 2;
+                          });
+                        };
+
                       }
-                      else {
-                        setState(() {
-                          purchase = "Insufficient stock in the machine";
-                          operation = 2;
-                        });
-                      };
+                  )
+              ),
 
-                    }
-                    else {
-                      setState(() {
-                        purchase = "Insufficient balance";
-                      operation = 2;
-                        operation2 = 2;
-                      });
-                    };
-
-                  }
-              )
-            ),
             SizedBox(
-              width: 4, //height to 9% of screen height,
+              width: 12, //height to 9% of screen height,
             ),
             Container (
-                width: 200,
-                height: 100,
+                width: 180,
+                height: 250,
                 child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                      // Add other style properties as needed
+                    ),
                     child: Center(
                       child: Column (
                         children: [
                           SizedBox(
                             height: 20, //height to 9% of screen height,
                           ),
-                          Text('Banana',
-                            style: TextStyle(fontSize: 25.0),
+                          Image.asset('assets/coca.png'),
+                          Text('Coca',
+                            style: TextStyle(fontSize: 25.0, color: Colors.black),
                           ),
-                          Center(child: Text('15 Br',
-                            style: TextStyle(fontSize: 20.0),
+                          Center(child: Text('20 Br',
+                            style: TextStyle(fontSize: 20.0, color: Colors.black),
                           )),
                         ],
                       ),
@@ -161,7 +208,7 @@ class _BuyitemPageState extends State<BuyitemPage> {
 
 
                     onPressed: () async {
-                      String item = 'banana';
+                      String item = 'coca';
                       int price = widget.machine.items![item]["price"];
                       int count = widget.machine.items![item]["stock"];
                       if (User.balance! >= price){
@@ -169,7 +216,9 @@ class _BuyitemPageState extends State<BuyitemPage> {
                           User.balance = User.balance! - price;
                           Machine.items![item]["stock"] = Machine.items![item]["stock"] - 1;
 
-                          var result = await purchaseItem('moya',User, Machine, price);
+                          var result = await purchaseItem('coca',User, Machine, price);
+                          var result2 = await destockmachine("coca",Machine,price);
+                          var result3 = await giveItem(2);
 
                           setState(() {
                             purchase = result;
@@ -199,36 +248,41 @@ class _BuyitemPageState extends State<BuyitemPage> {
           ],
         ),
         SizedBox(
-          height: 30, //height to 9% of screen height,
+          height: 10, //height to 9% of screen height,
         ),
         Row(
           children: [
             SizedBox(
-              width: 4, //height to 9% of screen height,
+              width: 16, //height to 9% of screen height,
             ),
             Container (
-                width: 200,
-                height: 100,
+                width: 180,
+                height: 250,
 
                 child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                      // Add other style properties as needed
+                    ),
                     child: Center(
                       child: Column (
                         children: [
                           SizedBox(
                             height: 20, //height to 9% of screen height,
                           ),
-                          Text('Bread',
-                            style: TextStyle(fontSize: 25.0),
+                          Image.asset('assets/rock.png'),
+                          Text('Rock',
+                            style: TextStyle(fontSize: 25.0, color: Colors.black),
                           ),
-                          Center(child: Text('8 Br',
-                            style: TextStyle(fontSize: 20.0),
+                          Center(child: Text('10 Br',
+                            style: TextStyle(fontSize: 20.0, color: Colors.black),
                           )),
                         ],
                       ),
                     ),
 
                     onPressed: () async {
-                      String item = 'bread';
+                      String item = 'rock';
                       int price = widget.machine.items![item]["price"];
                       int count = widget.machine.items![item]["stock"];
                       if (User.balance! >= price){
@@ -236,7 +290,9 @@ class _BuyitemPageState extends State<BuyitemPage> {
                           User.balance = User.balance! - price;
                           Machine.items![item]["stock"] = Machine.items![item]["stock"] - 1;
 
-                          var result = await purchaseItem('moya',User, Machine, price);
+                          var result = await purchaseItem('rock',User, Machine, price);
+                          var result2 = await destockmachine("rock",Machine,price);
+                          var result3 = await giveItem(3);
 
                           setState(() {
                             purchase = result;
@@ -247,7 +303,7 @@ class _BuyitemPageState extends State<BuyitemPage> {
                         else {
                           setState(() {
                             purchase = "Insufficient stock in the machine";
-                      operation = 2;
+                          operation = 2;
                           });
                         };
 
@@ -268,38 +324,41 @@ class _BuyitemPageState extends State<BuyitemPage> {
               width: 4, //height to 9% of screen height,
             ),
             Container (
-                width: 200,
-                height: 100,
+                width: 180,
+                height: 250,
                 child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                      // Add other style properties as needed
+                    ),
                     child: Center(
                       child: Column (
                         children: [
                           SizedBox(
                             height: 20, //height to 9% of screen height,
                           ),
-                          Text('Chips',
-                            style: TextStyle(fontSize: 25.0),
+                          Image.asset('assets/abuwalad.png'),
+                          Text('Abu walad',
+                            style: TextStyle(fontSize: 25.0, color: Colors.black),
                           ),
-                          Center(child: Text('10 Br',
-                            style: TextStyle(fontSize: 20.0),
+                          Center(child: Text('500 Br',
+                            style: TextStyle(fontSize: 20.0, color: Colors.black),
                           )),
                         ],
                       ),
                     ),
-                    style: ButtonStyle(
-                      // backgroundColor: ,
-                    ),
                     onPressed: () async {
-                      String item = 'chips';
+                      String item = 'abuwalad';
                       int price = widget.machine.items![item]["price"];
                       int count = widget.machine.items![item]["stock"];
                       if (User.balance! >= price){
                         if (count > 0){
                           User.balance = User.balance! - price;
                           Machine.items![item]["stock"] = Machine.items![item]["stock"] - 1;
-
-                          var result = await purchaseItem('chips',User, Machine, price);
-                          var result2 = await destockmachine("chips",Machine,price);
+                          print(Machine.items);
+                          var result = await purchaseItem('abuwalad',User, Machine, price);
+                          var result2 = await destockmachine("abuwalad",Machine,price);
+                          var result3 = await giveItem(4);
 
                           setState(() {
                             purchase = result;
@@ -330,10 +389,10 @@ class _BuyitemPageState extends State<BuyitemPage> {
           ],
         ),
         SizedBox(
-          height: 50, //height to 9% of screen height,
+          height: 15, //height to 9% of screen height,
         ),
        Container(
-         padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+         padding: const EdgeInsets.fromLTRB(0, 1, 0, 0),
          child: Center(
                 child: Column(
                   children: [
@@ -400,6 +459,33 @@ class _BuyitemPageState extends State<BuyitemPage> {
     var res2 = await req.send();
 
     return "Transaction successful.";
+    // return failure
+  }
+
+  Future<String> giveItem(int val) async {
+    // return item;
+    // access api
+    // var headersList = {
+    //   'Accept': '*/*',
+    //   'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+    //   'Content-Type': 'application/json'
+    // };
+    //
+    //
+    // // decrease amount from user balance
+    print("giving item");
+    print(val);
+
+    Response response;
+    var dio = Dio();
+
+
+    response = await dio.post("http://192.168.29.218:8080/object/", data: {
+    'val': val,
+    });
+    // print(response.data['verdict']);
+
+    return response.data;
     // return failure
   }
 }

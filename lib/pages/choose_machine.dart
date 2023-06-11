@@ -118,13 +118,13 @@ class _ChooseMachineState extends State<ChooseMachine> {
                         });
                         }
                         else{
-                        Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                        builder: (context) => BuyitemPage(user: widget.data, machine: machine)),
-                        (Route<dynamic> route) => false,
-                        );
-                        }
+                          Navigator.push(
+                            context,
+                              MaterialPageRoute(
+                              builder: (context) => BuyitemPage(user: widget.data, machine: machine)),
+                              // (Route<dynamic> route) => false,
+                            );
+                          }
                         }
                       )),
 
@@ -163,11 +163,11 @@ class _ChooseMachineState extends State<ChooseMachine> {
                           });
                         }
                         else{
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => BuyitemPage(user: widget.data, machine: machine)),
-                              (Route<dynamic> route) => false,
+
                         );
                         }
                         }

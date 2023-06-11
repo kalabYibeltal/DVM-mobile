@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../datamodel.dart';
 import 'package:dvm/pages/choose_machine.dart';
 // import 'package:requests/requests.dart';
+import 'package:dvm/pages/menu.dart';
 
 import 'package:dvm/pages/signup.dart';
 
@@ -222,11 +223,11 @@ class _LoginStatefulState extends State<LoginStateful> {
                         });
                       }
                      else {
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ChooseMachine(data: data)),
-                              (Route<dynamic> route) => false,
+                              builder: (context) => Menu(data: data)),
+                              // (Route<dynamic> route) => false,
                         );
                       }
                     })),
@@ -261,10 +262,9 @@ class _LoginStatefulState extends State<LoginStateful> {
                   ),
                   onPressed: () {
                     //signup screen
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Signup()),
-                          (Route<dynamic> route) => false,
                     );
                   },
                 ),

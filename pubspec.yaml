@@ -34,11 +34,12 @@ dependencies:
   http: ^0.13.5
   requests: ^4.3.0
   url_launcher: ^6.0.0
-
+  dio: ^4.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  permission_handler: ^10.3.0
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +52,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_logs: 2.1.10
+  geolocator: ^8.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
